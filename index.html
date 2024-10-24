@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homophones Exercise</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 20px;
+        }
+        #logo {
+            width: 150px; /* Adjust the logo size as needed */
+            margin-bottom: 20px;
+        }
+        .sentence {
+            font-size: 24px;
+            margin: 20px 0;
+        }
+        .feedback {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+        .next {
+            margin-top: 30px;
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: none;
+        }
+        .next:hover {
+            background-color: #388e3c;
+        }
+        .more-lessons {
+            margin-top: 40px;
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        .more-lessons:hover {
+            background-color: #388e3c;
+        }
+    </style>
+</head>
+<body>
+
+<img id="logo" src="https://i.imgur.com/mwpTHJj.png" alt="Logo">
+<h1>Homophones Exercise</h1>
+<p>Please select the correct word or meaning.</p>
+
+<div id="exercise-section">
+    <div class="sentence" id="sentence"></div>
+    <select id="homophone-select"></select>
+    <div id="meaning-section" style="display: none;">
+        <div class="sentence" id="word"></div>
+        <select id="meaning-select"></select>
+    </div>
+    <button id="submit">Submit</button>
+    <div class="feedback" id="feedback"></div>
+</div>
+
+<a href="#" class="next" id="next-button">Next Exercise</a>
+
+<!-- More Lessons Button -->
+<a href="https://sites.google.com/view/grades-2/home" class="more-lessons">More Lessons</a>
+
+<script>
+    const exercises = [
+        { sentence: "I have [two/too] apples.", options: ["two", "too"], correct: "two" },
+        { sentence: "The sun is [shining/shinning].", options: ["shining", "shinning"], correct: "shining" },
+        { sentence: "Please [sea/see] the map.", options: ["sea", "see"], correct: "see" },
+        { sentence: "I [knead/need] some help.", options: ["knead", "need"], correct: "need" },
+        { sentence: "The dog is [barking/barking].", options: ["barking", "barking"], correct: "barking" },
+        { sentence: "She will [brake/break] the glass.", options: ["brake", "break"], correct: "break" },
+        { sentence: "We can [meet/meet] at the park.", options: ["meet", "meet"], correct: "meet" },
+        { sentence: "He [knows/noes] the answer.", options: ["knows", "noes"], correct: "knows" },
+        { sentence: "I will [write/right] my name.", options: ["write", "right"], correct: "write" },
+        { sentence: "The flower is [blue/blew].", options: ["blue", "blew"], correct: "blue" },
+        { word: "flour", definitions: ["A powder used for baking.", "A type of flower."], correct: "A powder used for baking." },
+        { word: "pair", definitions: ["A couple of things.", "A type of clothing."], correct: "A couple of things." },
+        { word: "peace", definitions: ["Calmness and quiet.", "A type of fruit."], correct: "Calmness and quiet." },
+        { word: "plane", definitions: ["A flying vehicle.", "A flat surface."], correct: "A flying vehicle." },
+        { word: "bare", definitions: ["Without covering.", "A type of bear."], correct: "Without covering." },
+        { word: "whole", definitions: ["Complete or entire.", "A type of hole."], correct: "Complete or entire." },
+        { word: "knight", definitions: ["A medieval warrior.", "A type of light."], correct: "A medieval warrior." },
+        { word: "mail", definitions: ["Letters and packages.", "A type of sail."], correct: "Letters and packages." },
+        { word: "bored", definitions: ["Feeling uninterested.", "A type of board."], correct: "Feeling uninterested." },
+        { word: "would", definitions: ["A past tense of will.", "A type of wood."], correct: "A past tense of will." },
+    ];
+
+    let currentExercise = 0;
+
+    const sentenceElement = document.getElementById('sentence');
+    const homophoneSelect = document.getElementById('homophone-select');
+    const meaningSection = document.getElementById('meaning-section');
+    const wordElement = document.getElementById('word');
+    const meaningSelect = document.getElementById('meaning-select');
+    const feedbackElement = document.getElementById('feedback');
+    const nextButton = document.getElementById('next-button');
+
+    function loadExercise() {
+        const exercise = exercises[currentExercise];
+        feedbackElement.textContent = '';
+
+        if (exercise.sentence) {
+            sentenceElement.textContent = exercise.sentence;
+            homophoneSelect.innerHTML = '';
+            exercise.options.forEach(option => {
+                const optionElement = document.createElement('option');
+                optionElement.value = option;
+                optionElement.textContent = option;
+                homophoneSelect.appendChild(optionElement);
+            });
+            homophoneSelect.style.display = 'inline';
+            meaningSection.style.display = 'none';
+        } else {
+            // If the exercise is to match the meaning
+            wordElement.textContent = exercise.word;
+            meaningSelect.innerHTML = '';
+            exercise.definitions.forEach(def => {
+                const optionElement = document.createElement('option');
+                optionElement.value = def;
+                optionElement.textContent = def;
+                meaningSelect.appendChild(optionElement);
+            });
+            meaningSelect.style.display = 'inline';
+            meaningSection.style.display = 'block';
+            sentenceElement.textContent = '';
+        }
+    }
+
+    document.getElementById('submit').addEventListener('click', () => {
+        const exercise = exercises[currentExercise];
+
+        if (exercise.sentence) {
+            const selectedWord = homophoneSelect.value;
+
+            if (selectedWord === exercise.correct) {
+                feedbackElement.textContent = "Nice choice!";
+            } else {
+                feedbackElement.textContent = `Incorrect! The correct word is "${exercise.correct}".`;
+            }
+        } else {
+            const selectedMeaning = meaningSelect.value;
+
+            if (selectedMeaning === exercise.correct) {
+                feedbackElement.textContent = "Correct!";
+            } else {
+                feedbackElement.textContent = `Incorrect! The correct meaning is: "${exercise.correct}".`;
+            }
+        }
+
+        nextButton.style.display = 'block';
+    });
+
+    nextButton.addEventListener('click', () => {
+        currentExercise++;
+        if (currentExercise < exercises.length) {
+            loadExercise();
+            nextButton.style.display = 'none';
+        } else {
+            sentenceElement.textContent = "Great job! You've completed the exercises.";
+            homophoneSelect.style.display = 'none';
+            meaningSection.style.display = 'none';
+            nextButton.style.display = 'none';
+        }
+    });
+
+    loadExercise();
+</script>
+
+</body>
+</html>
+
+
